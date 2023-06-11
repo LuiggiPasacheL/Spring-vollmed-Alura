@@ -13,4 +13,7 @@ public record DatosDireccion(
         String numero,
         @NotBlank
         String complemento) {
+    public DatosDireccion(Direccion direccion) {
+        this(direccion.getCalle(), direccion.getDistrito(), direccion.getCiudad(), direccion.getNumero(), direccion.getComplemento());
+    }
 }
