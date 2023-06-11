@@ -21,6 +21,7 @@ public class Paciente {
     private String email;
     private String documento;
     private String telefono;
+    private Boolean activo;
     @Embedded
     private Direccion direccion;
 
@@ -33,7 +34,7 @@ public class Paciente {
     }
 
     public void inhabilitar() {
-        // TODO: Soft delete a paciente
+        activo = false;
     }
 
     public void actualizarDatos(DatosActualizarPaciente datos) {

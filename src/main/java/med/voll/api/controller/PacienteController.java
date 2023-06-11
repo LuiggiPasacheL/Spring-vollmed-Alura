@@ -23,7 +23,7 @@ public class PacienteController {
 
     @GetMapping
     public Page<DatosListadoPaciente> ListadoPaciente(Pageable pageable){
-        return repository.findAll(pageable).map(DatosListadoPaciente::new);
+        return repository.findByActivoTrue(pageable).map(DatosListadoPaciente::new);
     }
 
     @PutMapping
