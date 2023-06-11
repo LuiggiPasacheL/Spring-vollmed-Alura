@@ -31,4 +31,26 @@ public class Paciente {
         telefono = datosRegistroPaciente.telefono();
         direccion = new Direccion(datosRegistroPaciente.datosDireccion());
     }
+
+    public void inhabilitar() {
+        // TODO: Soft delete a paciente
+    }
+
+    public void actualizarDatos(DatosActualizarPaciente datos) {
+        if (datos.nombre() != null) {
+            nombre = datos.nombre();
+        }
+        if (datos.email() != null) {
+            email = datos.email();
+        }
+        if (datos.documento() != null) {
+            documento = datos.documento();
+        }
+        if (datos.telefono() != null) {
+            telefono = datos.telefono();
+        }
+        if (datos.direccion() != null) {
+            direccion = direccion.actualizarDatos(datos.direccion());
+        }
+    }
 }
