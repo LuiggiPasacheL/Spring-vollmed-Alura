@@ -18,6 +18,5 @@ public record DatosRegistroPaciente(
         @NotBlank
         String documento,
         @NotNull
-        DatosDireccion datosDireccion
-) {
+        DatosDireccion direccion) {
 }

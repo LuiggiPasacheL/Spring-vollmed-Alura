@@ -32,7 +32,8 @@ public class Paciente {
         email = datosRegistroPaciente.email();
         documento = datosRegistroPaciente.documento();
         telefono = datosRegistroPaciente.telefono();
-        direccion = new Direccion(datosRegistroPaciente.datosDireccion());
+        direccion = new Direccion(datosRegistroPaciente.direccion());
+        activo = true;
     }
 
     public void inhabilitar() {
