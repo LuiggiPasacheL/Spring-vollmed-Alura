@@ -5,11 +5,13 @@ meta {
 }
 
 get {
-  url: http://localhost:8080/medicos
+  url: http://localhost:8080/medicos?size=2&page=0&sort=nombre
   body: none
   auth: none
 }
 
 query {
-  paginacion: 
+  size: 2
+  page: 0
+  sort: nombre
 }
