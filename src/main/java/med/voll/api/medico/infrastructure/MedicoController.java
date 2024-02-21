@@ -64,7 +64,7 @@ public class MedicoController {
     }
 
     @ExceptionHandler(value = PropertyReferenceException.class)
-    public ResponseEntity<ErrorResponse> propertyReferenceException(PropertyReferenceException e) {
+    public ResponseEntity<ErrorResponse> handlePropertyReferenceException(PropertyReferenceException e) {
         return ResponseEntity.badRequest().body(new ErrorResponse("La propiedad \"" + e.getPropertyName() + "\" no existe en la entidad Medico"));
     }
 }

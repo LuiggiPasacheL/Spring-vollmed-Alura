@@ -2,12 +2,15 @@ package med.voll.api.paciente.infrastructure;
 
 import med.voll.api.paciente.application.*;
 import med.voll.api.paciente.domain.Paciente;
+import med.voll.api.util.ErrorResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.annotation.QueryAnnotation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,14 +19,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
 @RestController
 @RequestMapping("pacientes")
+@Slf4j
 public class PacienteController {
 
     @Autowired
@@ -59,6 +66,18 @@ public class PacienteController {
     public ResponseEntity<?> eliminarPaciente(@PathVariable Long id) {
         service.eliminarPaciente(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @ExceptionHandler(value = EntityNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFoundPaciente(EntityNotFoundException e) {
+        log.warn("Paciente no encontrado", e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Paciente no encontrado"));
+    }
+
+    @ExceptionHandler(value = Exception.class)
+    public ResponseEntity<ErrorResponse> handleException(Exception e) {
+        log.error("Error interno en el servidor", e.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Error interno en el servidor"));
     }
 
 }
