@@ -29,8 +29,9 @@ public class MedicoController {
     private MedicoService service;
 
     @PostMapping
-    public ResponseEntity<DatosRespuestaMedico> registrarMedico(@RequestBody @Valid DatosRegistroMedico datosRegistroMedico,
-                                          UriComponentsBuilder uriComponentsBuilder){
+    public ResponseEntity<DatosRespuestaMedico> registrarMedico(
+            @RequestBody @Valid DatosRegistroMedico datosRegistroMedico,
+            UriComponentsBuilder uriComponentsBuilder) {
         Medico medico = service.registrarMedico(datosRegistroMedico);
 
         DatosRespuestaMedico datosRespuestaMedico = new DatosRespuestaMedico(medico);
@@ -44,7 +45,9 @@ public class MedicoController {
     // @PageableDefault -> Cambia los valores por defecto de la interfaz Pageable
     public ResponseEntity<Page<DatosListadoMedico>> listadoMedico(@PageableDefault(size = 2) Pageable paginacion) {
         // Convierte toda la lista de medico a lista de DatosListadoMedico
-        return ResponseEntity.ok(service.obtenerListadoMedico(paginacion).map(DatosListadoMedico::new)); // Retorna un 200 (Ok) con la pagina
+        return ResponseEntity.ok(service.obtenerListadoMedico(paginacion).map(DatosListadoMedico::new)); // Retorna un
+                                                                                                         // 200 (Ok) con
+                                                                                                         // la pagina
     }
 
     @GetMapping("/{id}")
@@ -55,8 +58,10 @@ public class MedicoController {
 
     @PutMapping
     @Transactional // <- Libera la transaccion cuando se termina el método
-    public ResponseEntity<DatosRespuestaMedico> actualizarMedico(@RequestBody DatosActualizarMedico datosActualizarMedico) {
-        DatosRespuestaMedico datosRespuestaMedico = new DatosRespuestaMedico(service.actualizarMedico(datosActualizarMedico));
+    public ResponseEntity<DatosRespuestaMedico> actualizarMedico(
+            @RequestBody DatosActualizarMedico datosActualizarMedico) {
+        DatosRespuestaMedico datosRespuestaMedico = new DatosRespuestaMedico(
+                service.actualizarMedico(datosActualizarMedico));
         return ResponseEntity.ok(datosRespuestaMedico); // Retorna un 200 (Ok) con el médico editado
     }
 
@@ -71,13 +76,13 @@ public class MedicoController {
     public ResponseEntity<ErrorResponse> handlePropertyReferenceException(PropertyReferenceException e) {
         log.warn("Propiedad no encontrada", e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(new ErrorResponse("La propiedad \"" + e.getPropertyName() + "\" no existe en la entidad Medico"));
+                .body(new ErrorResponse("La propiedad \"" + e.getPropertyName() + "\" no existe en la entidad Medico"));
     }
 
     @ExceptionHandler(value = EntityNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFoundMedico(EntityNotFoundException e) {
         log.warn("Paciente no encontrado", e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-            .body(new ErrorResponse("Medico no encontrado"));
+                .body(new ErrorResponse("Medico no encontrado"));
     }
 }

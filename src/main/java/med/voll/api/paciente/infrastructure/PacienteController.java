@@ -38,7 +38,8 @@ public class PacienteController {
     private PacienteService service;
 
     @PostMapping
-    public ResponseEntity<DatosRespuestaPaciente> registrarPaciente(@RequestBody @Valid DatosRegistroPaciente datos, UriComponentsBuilder uriComponentsBuilder) {
+    public ResponseEntity<DatosRespuestaPaciente> registrarPaciente(@RequestBody @Valid DatosRegistroPaciente datos, 
+            UriComponentsBuilder uriComponentsBuilder) {
         Paciente paciente = service.registrarPaciente(datos);
         DatosRespuestaPaciente datosRespuestaPaciente = new DatosRespuestaPaciente(paciente);
         URI uri = uriComponentsBuilder.path("/pacientes/{id}").buildAndExpand(paciente.getId()).toUri();
