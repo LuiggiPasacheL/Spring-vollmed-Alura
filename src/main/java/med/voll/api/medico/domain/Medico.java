@@ -1,4 +1,4 @@
-package med.voll.api.medico;
+package med.voll.api.medico.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -6,6 +6,8 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import med.voll.api.direccion.Direccion;
+import med.voll.api.medico.infrastructure.DatosActualizarMedico;
+import med.voll.api.medico.infrastructure.DatosRegistroMedico;
 
 @Entity
 @Table(name = "medicos")

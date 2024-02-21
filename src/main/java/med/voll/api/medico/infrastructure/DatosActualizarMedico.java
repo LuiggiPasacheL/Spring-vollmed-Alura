@@ -1,4 +1,4 @@
-package med.voll.api.medico;
+package med.voll.api.medico.infrastructure;
 
 
 import jakarta.validation.constraints.NotNull;
