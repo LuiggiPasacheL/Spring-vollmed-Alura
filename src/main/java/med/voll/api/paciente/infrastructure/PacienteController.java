@@ -7,6 +7,7 @@ import med.voll.api.util.ErrorResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -68,16 +69,18 @@ public class PacienteController {
         return ResponseEntity.noContent().build();
     }
 
+    @ExceptionHandler(value = PropertyReferenceException.class)
+    public ResponseEntity<ErrorResponse> handlePropertyReferenceException(PropertyReferenceException e) {
+        log.warn("Propiedad no encontrada", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(new ErrorResponse("La propiedad \"" + e.getPropertyName() + "\" no existe en la entidad Paciente"));
+    }
+
     @ExceptionHandler(value = EntityNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFoundPaciente(EntityNotFoundException e) {
         log.warn("Paciente no encontrado", e.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Paciente no encontrado"));
-    }
-
-    @ExceptionHandler(value = Exception.class)
-    public ResponseEntity<ErrorResponse> handleException(Exception e) {
-        log.error("Error interno en el servidor", e.getMessage());
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Error interno en el servidor"));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(new ErrorResponse("Paciente no encontrado"));
     }
 
 }

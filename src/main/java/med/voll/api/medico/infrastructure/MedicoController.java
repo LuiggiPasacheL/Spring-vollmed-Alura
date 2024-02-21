@@ -1,7 +1,9 @@
 package med.voll.api.medico.infrastructure;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import med.voll.api.medico.application.MedicoService;
 import med.voll.api.medico.domain.Medico;
 import med.voll.api.util.ErrorResponse;
@@ -11,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -19,6 +22,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/medicos")
+@Slf4j
 public class MedicoController {
 
     @Autowired
@@ -65,6 +69,15 @@ public class MedicoController {
 
     @ExceptionHandler(value = PropertyReferenceException.class)
     public ResponseEntity<ErrorResponse> handlePropertyReferenceException(PropertyReferenceException e) {
-        return ResponseEntity.badRequest().body(new ErrorResponse("La propiedad \"" + e.getPropertyName() + "\" no existe en la entidad Medico"));
+        log.warn("Propiedad no encontrada", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(new ErrorResponse("La propiedad \"" + e.getPropertyName() + "\" no existe en la entidad Medico"));
+    }
+
+    @ExceptionHandler(value = EntityNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFoundMedico(EntityNotFoundException e) {
+        log.warn("Paciente no encontrado", e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(new ErrorResponse("Medico no encontrado"));
     }
 }
