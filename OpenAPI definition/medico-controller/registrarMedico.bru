@@ -1,0 +1,22 @@
+meta {
+  name: registrarMedico
+  type: http
+  seq: 3
+}
+
+post {
+  url: http://localhost:8080/medicos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "",
+    "email": "",
+    "telefono": "",
+    "documento": "",
+    "especialidad": "",
+    "direccion": ""
+  }
+}

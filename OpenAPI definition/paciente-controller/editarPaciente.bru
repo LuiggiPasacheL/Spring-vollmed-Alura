@@ -1,0 +1,28 @@
+meta {
+  name: editarPaciente
+  type: http
+  seq: 2
+}
+
+put {
+  url: http://localhost:8080/pacientes
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": "",
+    "nombre": "",
+    "email": "",
+    "documento": "",
+    "telefono": "",
+    "direccion": {
+      "calle": "",
+      "distrito": "",
+      "ciudad": "",
+      "numero": "",
+      "complemento": ""
+    }
+  }
+}

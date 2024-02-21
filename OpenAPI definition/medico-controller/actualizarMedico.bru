@@ -1,0 +1,20 @@
+meta {
+  name: actualizarMedico
+  type: http
+  seq: 2
+}
+
+put {
+  url: http://localhost:8080/medicos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "id": "",
+    "nombre": "",
+    "documento": "",
+    "direccion": ""
+  }
+}
