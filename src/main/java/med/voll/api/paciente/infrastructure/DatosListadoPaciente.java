@@ -1,4 +1,6 @@
-package med.voll.api.paciente;
+package med.voll.api.paciente.infrastructure;
+
+import med.voll.api.paciente.domain.Paciente;
 
 public record DatosListadoPaciente (Long id, String nombre, String email, String documentoIdentidad){
 

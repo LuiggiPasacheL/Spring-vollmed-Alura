@@ -2,14 +2,11 @@ package med.voll.api.medico.infrastructure;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import med.voll.api.medico.application.ActualizarMedicoCasoUso;
-import med.voll.api.medico.application.DesactivarMedicoCasoUso;
-import med.voll.api.medico.application.ObtenerListadoMedicoCasoUso;
-import med.voll.api.medico.application.ObtenerMedicoCasoUso;
-import med.voll.api.medico.application.RegistrarMedicoCasoUso;
+import med.voll.api.medico.application.MedicoService;
 import med.voll.api.medico.domain.Medico;
 import med.voll.api.util.ErrorResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mapping.PropertyReferenceException;
@@ -24,10 +21,13 @@ import java.net.URI;
 @RequestMapping("/medicos")
 public class MedicoController {
 
+    @Autowired
+    private MedicoService service;
+
     @PostMapping
     public ResponseEntity<DatosRespuestaMedico> registrarMedico(@RequestBody @Valid DatosRegistroMedico datosRegistroMedico,
                                           UriComponentsBuilder uriComponentsBuilder){
-        Medico medico = RegistrarMedicoCasoUso.execute(datosRegistroMedico);
+        Medico medico = service.registrarMedico(datosRegistroMedico);
 
         DatosRespuestaMedico datosRespuestaMedico = new DatosRespuestaMedico(medico);
         URI url = uriComponentsBuilder.path("/medicos/{id}").buildAndExpand(medico.getId()).toUri();
@@ -40,26 +40,26 @@ public class MedicoController {
     // @PageableDefault -> Cambia los valores por defecto de la interfaz Pageable
     public ResponseEntity<Page<DatosListadoMedico>> listadoMedico(@PageableDefault(size = 2) Pageable paginacion) {
         // Convierte toda la lista de medico a lista de DatosListadoMedico
-        return ResponseEntity.ok(ObtenerListadoMedicoCasoUso.execute(paginacion).map(DatosListadoMedico::new)); // Retorna un 200 (Ok) con la pagina
+        return ResponseEntity.ok(service.obtenerListadoMedico(paginacion).map(DatosListadoMedico::new)); // Retorna un 200 (Ok) con la pagina
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<DatosRespuestaMedico> obtenerMedico(@PathVariable Long id) {
-        DatosRespuestaMedico datosRespuestaMedico = new DatosRespuestaMedico(ObtenerMedicoCasoUso.execute(id));
+        DatosRespuestaMedico datosRespuestaMedico = new DatosRespuestaMedico(service.obtenerMedico(id));
         return ResponseEntity.ok(datosRespuestaMedico); // Retorna un 200 (Ok) con la entidad
     }
 
     @PutMapping
     @Transactional // <- Libera la transaccion cuando se termina el método
     public ResponseEntity<DatosRespuestaMedico> actualizarMedico(@RequestBody DatosActualizarMedico datosActualizarMedico) {
-        DatosRespuestaMedico datosRespuestaMedico = new DatosRespuestaMedico(ActualizarMedicoCasoUso.execute(datosActualizarMedico));
+        DatosRespuestaMedico datosRespuestaMedico = new DatosRespuestaMedico(service.actualizarMedico(datosActualizarMedico));
         return ResponseEntity.ok(datosRespuestaMedico); // Retorna un 200 (Ok) con el médico editado
     }
 
     @DeleteMapping("/{id}")
     @Transactional
     public ResponseEntity<DatosRespuestaMedico> eliminarMedico(@PathVariable Long id) {
-        DesactivarMedicoCasoUso.execute(id);
+        service.desactivarMedico(id);
         return ResponseEntity.noContent().build(); // Retorna un 204 (No content)
     }
 
